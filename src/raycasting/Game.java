@@ -74,6 +74,26 @@ public class Game extends JFrame implements Runnable {
 		g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
 		bs.show();
 	}
+	
+	public void run() {
+		long lastTime = System.nanoTime();
+		final double ns = 1000000000.0 / 60.0; 
+		double delta = 0;
+		requestFocus();
+		while(running) {
+			long now = System.nanoTime();
+			delta = delta + ((now - lastTime) / ns);
+			lastTime = now;
+			while (delta >= 1) {
+				delta--;
+			}
+			render();
+		}
+	}
+	
+	public static void main(String [] args) {
+		Game game = new Game();
+	}
 }
 
 
