@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 public class Game extends JFrame implements Runnable {
+	public ArrayList<Textures> textures;
+	
+	public Camera camera;
+	
 	private static final long SerialVersionUID = 1L;
 	public int MapWidth = 15;
 	public int mapHeight = 15;
@@ -37,6 +41,15 @@ public class Game extends JFrame implements Runnable {
 		};
 
 	public Game() {
+		textures = new ArrayList<Textures>();
+		textures.add(Textures.wood);
+		textures.add(Textures.stone);
+		textures.add(Textures.bluestone);
+		textures.add(Textures.brick);
+		
+		camera = new Camera(4.5, 4.5, 1, 0, 0, -.66);
+		addKeyListener(camera);
+		
 		thread = new Thread(this);
 		image = new BufferedImage(640, 480, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
