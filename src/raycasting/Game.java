@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 public class Game extends JFrame implements Runnable {
-	public ArrayList<Textures> textures;
-	
+	public ArrayList<Texture> textures;
 	public Camera camera;
+	public Screen screen; 
 	
 	private static final long SerialVersionUID = 1L;
-	public int MapWidth = 15;
+	public int mapWidth = 15;
 	public int mapHeight = 15;
 	private Thread thread;
 	private boolean running;
@@ -41,18 +41,21 @@ public class Game extends JFrame implements Runnable {
 		};
 
 	public Game() {
-		textures = new ArrayList<Textures>();
-		textures.add(Textures.wood);
-		textures.add(Textures.stone);
-		textures.add(Textures.bluestone);
-		textures.add(Textures.brick);
-		
-		camera = new Camera(4.5, 4.5, 1, 0, 0, -.66);
-		addKeyListener(camera);
-		
 		thread = new Thread(this);
 		image = new BufferedImage(640, 480, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+		
+		
+		textures = new ArrayList<Texture>();
+		textures.add(Texture.wood);
+		textures.add(Texture.stone);
+		textures.add(Texture.bluestone);
+		textures.add(Texture.brick);
+		
+		camera = new Camera(4.5, 4.5, 1, 0, 0, -.66);
+		screen = new Screen(map, mapWidth, mapHeight, textures, 640, 480);
+		addKeyListener(camera);
+		
 		setSize (640, 480);
 		setResizable(false);
 		setTitle("3D Engine");
@@ -98,6 +101,8 @@ public class Game extends JFrame implements Runnable {
 			delta = delta + ((now - lastTime) / ns);
 			lastTime = now;
 			while (delta >= 1) {
+				screen.update(camera, pixels);
+				camera.update(map);
 				delta--;
 			}
 			render();
